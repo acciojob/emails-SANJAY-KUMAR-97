@@ -1,65 +1,40 @@
 package com.driver;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 
-public class Gmail extends Email {
+public class Main {
+    public static void main(String[] args) throws ParseException {
+        Email email = new Email("accio@gmail.com");
+        email.changePassword("Accio@123", "V12@");
+        email.changePassword("Acio@123", "V12@v");
+        email.changePassword("Accio@123", "V12@v123");
+        email.getPassword();
 
-    int inboxCapacity; //maximum number of mails inbox can store
-    //Inbox: Stores mails. Each mail has date (Date), sender (String), message (String). It is guaranteed that message is distinct for all mails.
-    //Trash: Stores mails. Each mail has date (Date), sender (String), message (String)
-    public Gmail(String emailId, int inboxCapacity) {
+        Gmail gmail = new Gmail("accio@gmail.com", 3);
+        gmail.receiveMail(new SimpleDateFormat("dd/MM/yyyy").parse("21/12/2022"), "Tushar", "Assignment Completed?");
+        gmail.receiveMail(new SimpleDateFormat("dd/MM/yyyy").parse("22/12/2022"), "Tushar", "We are running out of time.");
+        gmail.receiveMail(new SimpleDateFormat("dd/MM/yyyy").parse("22/12/2022"), "Abhishek", "Assignment to be uploaded on database.");
+        gmail.receiveMail(new SimpleDateFormat("dd/MM/yyyy").parse("23/12/2022"), "Tushar", "Everything looks good.");
 
-    }
+        System.out.println("Total " + gmail.getInboxSize() + " mails in inbox.");
+        System.out.println("There are " + gmail.findMailsBetweenDates(new SimpleDateFormat("dd/MM/yyyy").parse("21/12/2022"), new SimpleDateFormat("dd/MM/yyyy").parse("22/12/2022")) + " mails between given dates!");
+        gmail.deleteMail("Everything looks good.");
+        System.out.println("The latest message is :" + gmail.findLatestMessage());
+        gmail.deleteMail("Assignment to be uploaded on database.");
+        System.out.println("There are " + gmail.getTrashSize() + " mails in the trash.");
+        gmail.emptyTrash();
+        System.out.println("There are " + gmail.getTrashSize() + " mails in the trash.");
 
-    public void receiveMail(Date date, String sender, String message){
-        // If the inbox is full, move the oldest mail in the inbox to trash and add the new mail to inbox.
-        // It is guaranteed that:
-        // 1. Each mail in the inbox is distinct.
-        // 2. The mails are received in non-decreasing order. This means that the date of a new mail is greater than equal to the dates of mails received already.
+        Workspace workspace = new Workspace("accio@gmail.com");
+        System.out.println("Inbox capacity is " + workspace.getInboxCapacity() + " in workspace.");
 
-    }
-
-    public void deleteMail(String message){
-        // Each message is distinct
-        // If the given message is found in any mail in the inbox, move the mail to trash, else do nothing
-
-    }
-
-    public String findLatestMessage(){
-        // If the inbox is empty, return null
-        // Else, return the message of the latest mail present in the inbox
-
-    }
-
-    public String findOldestMessage(){
-        // If the inbox is empty, return null
-        // Else, return the message of the oldest mail present in the inbox
-
-    }
-
-    public int findMailsBetweenDates(Date start, Date end){
-        //find number of mails in the inbox which are received between given dates
-        //It is guaranteed that start date <= end date
-
-    }
-
-    public int getInboxSize(){
-        // Return number of mails in inbox
-
-    }
-
-    public int getTrashSize(){
-        // Return number of mails in Trash
-
-    }
-
-    public void emptyTrash(){
-        // clear all mails in the trash
-
-    }
-
-    public int getInboxCapacity() {
-        // Return the maximum number of mails that can be stored in the inbox
+        workspace.addMeeting(new Meeting(LocalTime.parse("17:40"), LocalTime.parse("18:40")));
+        workspace.addMeeting(new Meeting(LocalTime.parse("13:30"), LocalTime.parse("18:00")));
+        workspace.addMeeting(new Meeting(LocalTime.parse("18:20"), LocalTime.parse("19:10")));
+        workspace.addMeeting(new Meeting(LocalTime.parse("19:50"), LocalTime.parse("21:05")));
+        workspace.addMeeting(new Meeting(LocalTime.parse("18:00"), LocalTime.parse("19:05")));
+        System.out.println("Maximum meetings you can attend in a day is " + workspace.findMaxMeetings());
     }
 }
